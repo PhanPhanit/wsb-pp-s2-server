@@ -20,6 +20,7 @@ const passportSetup = require('./passport/passport');
 // const morgan = require('morgan');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
 // database
 const connectDB = require('./db/connect');
 // routers
@@ -40,22 +41,22 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 // route
 // app.use(passport.initialize());
 app.use(express.static('./public'));
-// app.use(morgan('tiny'));
+app.use(morgan('tiny'));
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(fileUpload({useTempFiles: true}));
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/category', categoryRouter);
-app.use('/api/v1/checkout', checkoutRouter);
-app.use('/api/v1/product', productRouter);
-app.use('/api/v1/upload', uploadRouter);
-app.use('/api/v1/review', reviewRouter);
-app.use('/api/v1/order-item', orderItemRouter);
-app.use('/api/v1/order', orderRouter);
-app.use('/api/v1/slide', slideRouter);
-app.use('/api/v1/response-cookie', cookieRouter);
+app.use('/api/v1/wsb-cate', categoryRouter);
+app.use('/api/v1/wsb-ch-out', checkoutRouter);
+app.use('/api/v1/wsb-pro', productRouter);
+app.use('/api/v1/wsb-upload', uploadRouter);
+app.use('/api/v1/wsb-rev', reviewRouter);
+app.use('/api/v1/wsb-od-item', orderItemRouter);
+app.use('/api/v1/wsb-od', orderRouter);
+app.use('/api/v1/wsb-slide', slideRouter);
+app.use('/api/v1/wsb-res-cookie', cookieRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
