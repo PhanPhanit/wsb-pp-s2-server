@@ -83,37 +83,35 @@ const login = async (req, res) => {
 
 }
 const googleLogin = (req, res) => {
+    const protocol = req.headers['x-forwarded-proto'];
+    const host = req.headers['x-forwarded-host'];
+    const origin = `${protocol}://${host}`;
     if(req.user==="error"){
         res.cookie('wsbToken', 'logout', {
             httpOnly: true,
             expires: new Date(Date.now())
         });
-        res.redirect(`${process.env.DOMAIN_FRONT_END}/signin`);
+        res.redirect(`${origin}/signin`);
     }else{
-        // const tokenUser = createTokenUser(req.user);
-        // attackCookiesToResponse({res, user:tokenUser});
-        // res.redirect(`${process.env.DOMAIN_FRONT_END}`)
-
         const tokenUser = createTokenUser(req.user);
         const token = createJWT({payload: tokenUser});
-        res.redirect(`${process.env.DOMAIN_FRONT_END}/send-token?token=${token}`);
+        res.redirect(`${origin}/send-token?token=${token}`);
     }
 }
 const facebookLogin = (req, res) => {
+    const protocol = req.headers['x-forwarded-proto'];
+    const host = req.headers['x-forwarded-host'];
+    const origin = `${protocol}://${host}`;
     if(req.user==="error"){
         res.cookie('wsbToken', 'logout', {
             httpOnly: true,
             expires: new Date(Date.now())
         });
-        res.redirect(`${process.env.DOMAIN_FRONT_END}/signin`);
+        res.redirect(`${origin}/signin`);
     }else{
-        // const tokenUser = createTokenUser(req.user);
-        // attackCookiesToResponse({res, user:tokenUser});
-        // res.redirect(`${process.env.DOMAIN_FRONT_END}`)
-
         const tokenUser = createTokenUser(req.user);
         const token = createJWT({payload: tokenUser});
-        res.redirect(`${process.env.DOMAIN_FRONT_END}/send-token?token=${token}`);
+        res.redirect(`${origin}/send-token?token=${token}`);
     }
 }
 const logout = async (req, res) => {
