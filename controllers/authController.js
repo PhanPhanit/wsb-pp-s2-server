@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const Token = require('../models/Token');
 const {StatusCodes} = require('http-status-codes');
-const {createTokenUser, attachCookiesToResponse, createJWT} = require('../utils');
+const {createTokenUser, attachCookiesToResponse, createJWT, createJWTWithExp} = require('../utils');
 const CustomError = require('../errors');
 const crypto = require('crypto');
 
@@ -83,30 +83,19 @@ const login = async (req, res) => {
 
 }
 const googleLogin = (req, res) => {
-    const protocol = req.headers['x-forwarded-proto'];
-    const host = req.headers['x-forwarded-host'];
-    const origin = `${protocol}://${host}`;
+
+    const origin = process.env.DOMAIN_FRONT_END;
     if(req.user==="error"){
-        res.cookie('wsbToken', 'logout', {
-            httpOnly: true,
-            expires: new Date(Date.now())
-        });
         res.redirect(`${origin}/signin`);
     }else{
-        const tokenUser = createTokenUser(req.user);
-        const token = createJWT({payload: tokenUser});
+        const token = createJWTWithExp({payload: req.user.toJSON()});
+        // return res.status(200).json({token});
         res.redirect(`${origin}/send-token?token=${token}`);
     }
 }
 const facebookLogin = (req, res) => {
-    const protocol = req.headers['x-forwarded-proto'];
-    const host = req.headers['x-forwarded-host'];
-    const origin = `${protocol}://${host}`;
+    const origin = process.env.DOMAIN_FRONT_END;
     if(req.user==="error"){
-        res.cookie('wsbToken', 'logout', {
-            httpOnly: true,
-            expires: new Date(Date.now())
-        });
         res.redirect(`${origin}/signin`);
     }else{
         const tokenUser = createTokenUser(req.user);

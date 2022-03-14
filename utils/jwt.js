@@ -5,6 +5,12 @@ const createJWT = ({payload}) => {
     return token;
 }
 
+const createJWTWithExp = ({payload}) => {
+    console.log(payload);
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: 1000 * 60 * 30});
+    return token;
+}
+
 const isTokenValid = (token) => jwt.verify(token, process.env.JWT_SECRET);
 
 const attachCookiesToResponse = ({res, user, refreshToken}) => {
@@ -40,6 +46,7 @@ const cookiesResponse = ({res, token}) => {
 
 module.exports = {
     createJWT,
+    createJWTWithExp,
     isTokenValid,
     attachCookiesToResponse,
     cookiesResponse,
