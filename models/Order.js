@@ -15,13 +15,17 @@ const OrderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'confirm', 'success'],
+        enum: ['pending', 'success'],
         default: 'pending'
     },
     user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: true,
+    },
+    paymentIntent: {
+        type: String,
+        required: true
     },
     orderItem: [
         {

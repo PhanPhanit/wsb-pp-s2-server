@@ -5,12 +5,15 @@ const {StatusCodes} = require('http-status-codes');
 const checkPermissions = require('../utils/checkPermissions');
 
 const createOrder = async (req, res) => {
-    const {delivery, orderItem} = req.body;
+    const {delivery, orderItem, paymentIntent} = req.body;
     if(!orderItem || orderItem.length < 1){
         throw new CustomError.BadRequestError("No order item provided");
     }
     if(!delivery){
         throw new CustomError.BadRequestError("Please provide tax shipping fee");
+    }
+    if(!paymentIntent){
+        throw new CustomError.BadRequestError("Please provide payment intent");
     }
     let items = [];
     let subtotal = 0;
@@ -40,6 +43,7 @@ const createOrder = async (req, res) => {
         subtotal,
         total,
         user: req.user.userId,
+        paymentIntent,
         orderItem: items
     });
     res.status(StatusCodes.CREATED).json({order});
