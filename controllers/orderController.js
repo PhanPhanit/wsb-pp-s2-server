@@ -5,7 +5,15 @@ const {StatusCodes} = require('http-status-codes');
 const checkPermissions = require('../utils/checkPermissions');
 
 const createOrder = async (req, res) => {
-    const {delivery, orderItem, paymentIntent} = req.body;
+    const {
+        delivery,
+        orderItem,
+        paymentIntent,
+        phoneNumber,
+        city,
+        address,
+        orderDate
+    } = req.body;
     if(!orderItem || orderItem.length < 1){
         throw new CustomError.BadRequestError("No order item provided");
     }
@@ -44,6 +52,10 @@ const createOrder = async (req, res) => {
         total,
         user: req.user.userId,
         paymentIntent,
+        phoneNumber,
+        city,
+        address,
+        orderDate,
         orderItem: items
     });
     res.status(StatusCodes.CREATED).json({order});
@@ -77,7 +89,7 @@ const getSingleOrder = async (req, res) => {
     res.status(StatusCodes.OK).json({order});
 }
 const getCurrentUserOrder = async (req, res) => {
-    const order = await Order.find({user: req.user.userId});
+    const order = await Order.find({user: req.user.userId}).sort('-createdAt');
     res.status(StatusCodes.OK).json({order});
 }
 const updateOrder = async (req, res) => {

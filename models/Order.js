@@ -27,6 +27,22 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    phoneNumber: {
+        type: String,
+        required: true,
+    },
+    city: {
+        type: String,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    orderDate: {
+        type: Date,
+        required: true
+    },
     orderItem: [
         {
             name: {
