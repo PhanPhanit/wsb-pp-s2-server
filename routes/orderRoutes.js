@@ -6,7 +6,9 @@ const {
     getAllOrder,
     getSingleOrder,
     getCurrentUserOrder,
-    updateOrder
+    updateOrder,
+    getTotalOrder,
+    getTotalPrice
 } = require('../controllers/orderController');
 
 const {
@@ -20,6 +22,8 @@ router.route('/')
     .post(authenticationUser, createOrder);
 
 router.route('/show-all-my-order').get(authenticationUser, getCurrentUserOrder);
+router.route('/get-total-order').get(authenticationUser, authorizePermissions('admin', 'manager'), getTotalOrder);
+router.route('/get-total-price').get(authenticationUser, authorizePermissions('admin', 'manager'), getTotalPrice);
 
 router.route('/:id')
     .get(authenticationUser, getSingleOrder)

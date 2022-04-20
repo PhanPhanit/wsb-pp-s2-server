@@ -58,14 +58,23 @@ const createOrder = async (req, res) => {
         orderDate,
         orderItem: items
     });
-    res.status(StatusCodes.CREATED).json({order});
+
+    const orderWithUser = await Order.find({_id: order._id}).populate({path: "user", select: "-password"});
+
+    res.status(StatusCodes.CREATED).json({order: orderWithUser});
 }
 const getAllOrder = async (req, res) => {
-    const {_id, sort} = req.query;
+    const {id, sort, status, user} = req.query;
     let queryObject = {};
     let result = Order;
-    if(_id){
-        queryObject._id = _id;
+    if(id){
+        queryObject._id = id;
+    }
+    if(status){
+        queryObject.status = status;
+    }
+    if(user){
+        queryObject.user = user;
     }
     result = result.find(queryObject);
     if(sort){
@@ -76,7 +85,7 @@ const getAllOrder = async (req, res) => {
     const limit = Number(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const totalPage = Math.ceil(totalOrder / limit);
-    const order = await result.skip(skip).limit(limit);
+    const order = await result.skip(skip).limit(limit).populate({path: 'user', select: '-password'});
     res.status(StatusCodes.OK).json({order, count: order.length, currentPage:page, totalPage, totalOrder})
 }
 const getSingleOrder = async (req, res) => {
@@ -89,26 +98,81 @@ const getSingleOrder = async (req, res) => {
     res.status(StatusCodes.OK).json({order});
 }
 const getCurrentUserOrder = async (req, res) => {
-    const order = await Order.find({user: req.user.userId}).sort('-createdAt');
-    res.status(StatusCodes.OK).json({order});
+    const {id, status, user} = req.query;
+    let queryObject = {
+        user: req.user.userId
+    };
+    let result = Order;
+    if(id){
+        queryObject._id = id;
+    }
+    if(status){
+        queryObject.status = status;
+    }
+    if(user){
+        queryObject.user = user;
+    }
+    result = result.find(queryObject).sort('-createdAt');
+    const totalOrder = await Order.countDocuments(queryObject);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const totalPage = Math.ceil(totalOrder / limit);
+    const order = await result.skip(skip).limit(limit).populate({path: 'user', select: '-password'});
+    res.status(StatusCodes.OK).json({order, count: order.length, currentPage:page, totalPage, totalOrder});
 }
 const updateOrder = async (req, res) => {
     const {id: orderId} = req.params;
     const {status} = req.body;
-    const order = await Order.findOne({_id: orderId});
+    if(!status){
+        throw new CustomError.BadRequestError('The status field required!');
+    }
+    const order = await Order.findOne({_id: orderId}).populate({path: 'user', select: '-password'});
     if(!order){
         throw new CustomError.NotFoundError(`No order with id: ${orderId}`);
     }
-    // if(req.user.role!=='admin' && req.user.role!=='manager'){
-    //     if(req.user.userId !== order.user.toString()){
-    //         throw new CustomError.UnauthenticatedError('Not authorized to access this route');
-    //     }else{
-    //         order.status =
-    //     }
-    // }
     order.status = status;
     await order.save();
     res.status(StatusCodes.OK).json({order});
+}
+
+const getTotalOrder = async (req, res) => {
+    const {status, user} = req.query;
+    let queryObject = {};
+    if(status){
+        queryObject.status = status;
+    }
+    if(user){
+        queryObject.user = user;
+    }
+    const totalOrder = await Order.countDocuments(queryObject);
+    res.status(StatusCodes.OK).json({totalOrder});
+}
+
+const getTotalPrice = async (req, res) => {
+    const {status, user} = req.query;
+    let queryObject = {};
+    if(status){
+        queryObject.status = status;
+    }
+    if(user){
+        queryObject.user = user;
+    }
+    const orderTotalPrice = await Order.aggregate([
+        {
+          '$match': queryObject
+        },
+        {
+          '$group': {
+            '_id': null, 
+            'totalPrice': {
+              '$sum': '$total'
+            }
+          }
+        }
+    ]);
+    const totalPrice = orderTotalPrice[0]?orderTotalPrice[0].totalPrice:0;
+    res.status(StatusCodes.OK).json({totalPrice});
 }
 
 
@@ -117,5 +181,7 @@ module.exports = {
     getAllOrder,
     getSingleOrder,
     getCurrentUserOrder,
-    updateOrder
+    updateOrder,
+    getTotalOrder,
+    getTotalPrice
 }

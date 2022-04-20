@@ -9,6 +9,9 @@ const uploadImageLocal = async (req, res) => {
         throw new CustomError.BadRequestError('No File Uploaded');
     }
     const images = req.files.images;
+    if(!images || images.length===0){
+        throw new CustomError.BadRequestError('Please upload file images');
+    }
     let allImagePath = [];
     if(images instanceof Array){
         images.forEach(image=>{
@@ -20,7 +23,8 @@ const uploadImageLocal = async (req, res) => {
             const imageName = Date.now() + Math.ceil(Math.random()*100000) + "-" + image.name;
             const imagePath = path.join(__dirname, '../public/uploads/' + `${imageName}`);
             await image.mv(imagePath);
-            allImagePath = [...allImagePath, imageName];
+            const imagUrl =  `${process.env.DOMAIN_SERVER}/uploads/${imageName}`;
+            allImagePath = [...allImagePath, imagUrl];
         }
     }else{
         if(!images.mimetype.startsWith('image')){
@@ -29,9 +33,11 @@ const uploadImageLocal = async (req, res) => {
         const imageName = Date.now() + Math.ceil(Math.random()*100000) + "-" + images.name;
         const imagePath = path.join(__dirname, '../public/uploads/' + `${imageName}`);
         await images.mv(imagePath);
-        allImagePath = [...allImagePath, imageName];
+        const imagUrl = `${process.env.DOMAIN_SERVER}/uploads/${imageName}`;
+        allImagePath = [...allImagePath, imagUrl];
     }
-    res.status(StatusCodes.OK).json({img: allImagePath});
+    res.status(StatusCodes.OK).json({images: allImagePath});
+
 }
 
 const uploadImageCloud = async (req, res) => {
@@ -39,6 +45,28 @@ const uploadImageCloud = async (req, res) => {
         throw new CustomError.BadRequestError('No File Uploaded');
     }
     const images = req.files.images;
+    if(!images || images.length===0){
+        const directory = 'tmp';
+        fs.readdir(directory, (err, files) => {
+            if (err){
+                throw new CustomError.NotFoundError(`No found file delete.`)
+            }
+            for (const file of files) {
+                try {
+                    if(fs.existsSync(`${directory}/${file}`)){
+                        fs.unlink(path.join(directory, file), err => {
+                            if (err){
+                                throw new CustomError.NotFoundError(`No found file delete.`);
+                            }
+                        });
+                    }
+                } catch (error) {
+                    res.status(500).json({msg: "Something went wrong!"});
+                }
+            }
+        });
+        throw new CustomError.BadRequestError('Please upload file images');
+    }
     let allImagePath = [];
     if(images instanceof Array){
         for(let i=0;i<images.length;i++){
@@ -47,7 +75,7 @@ const uploadImageCloud = async (req, res) => {
                 folder: 'wsb-photo'
             });
             fs.unlinkSync(req.files.images[i].tempFilePath);
-            allImagePath = [...allImagePath, result.secure_url]
+            allImagePath = [...allImagePath, result.secure_url];
         }
     }else{
         const result = await cloudinary.uploader.upload(req.files.images.tempFilePath, {
@@ -55,9 +83,10 @@ const uploadImageCloud = async (req, res) => {
             folder: 'wsb-photo'
         });
         fs.unlinkSync(req.files.images.tempFilePath);
-        allImagePath = [...allImagePath, result.secure_url]
+        allImagePath = [...allImagePath, result.secure_url];
     }
     res.status(StatusCodes.OK).json({images: allImagePath});
+
 }
 
 module.exports = {

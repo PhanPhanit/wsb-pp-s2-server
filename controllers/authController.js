@@ -39,7 +39,7 @@ const register = async (req, res) => {
 
 
     attachCookiesToResponse({res, user:tokenUser, refreshToken});
-    res.status(StatusCodes.OK).json({tokenUser});
+    res.status(StatusCodes.OK).json({user: tokenUser});
 }
 const login = async (req, res) => {
     const {email, password} = req.body;
