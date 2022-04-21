@@ -3,6 +3,7 @@ const Product = require('../models/Product');
 const CustomError = require('../errors');
 const {StatusCodes} = require('http-status-codes');
 const checkPermissions = require('../utils/checkPermissions');
+const mongoose = require('mongoose');
 
 const createOrder = async (req, res) => {
     const {
@@ -64,17 +65,74 @@ const createOrder = async (req, res) => {
     res.status(StatusCodes.CREATED).json({order: orderWithUser});
 }
 const getAllOrder = async (req, res) => {
-    const {id, sort, status, user} = req.query;
-    let queryObject = {};
+    // const {id, sort, status, user} = req.query;
+    // let queryObject = {};
+    // let result = Order;
+    // if(id){
+    //     queryObject._id = id;
+    // }
+    // if(status){
+    //     queryObject.status = status;
+    // }
+    // if(user){
+    //     queryObject.user = user;
+    // }
+    // result = result.find(queryObject);
+    // if(sort){
+    //     result = result.sort(sort);
+    // }
+    // const totalOrder = await Order.countDocuments(queryObject);
+    // const page = Number(req.query.page) || 1;
+    // const limit = Number(req.query.limit) || 10;
+    // const skip = (page - 1) * limit;
+    // const totalPage = Math.ceil(totalOrder / limit);
+    // const order = await result.skip(skip).limit(limit).populate({path: 'user', select: '-password'});
+    // res.status(StatusCodes.OK).json({order, count: order.length, currentPage:page, totalPage, totalOrder})
+
+    const {id, sort, status, user, search} = req.query;
+    let queryObject = {
+        $and: [
+            {
+                $or: [
+                    {status: new RegExp('', 'i')}
+                ]
+            }
+        ]
+    };
     let result = Order;
+    if(search){
+        let regex = new RegExp(search,'i');
+        let orQuery = [
+            {_id: mongoose.Types.ObjectId.isValid(search)?mongoose.Types.ObjectId(search):null},
+            {status: regex },
+            {paymentIntent: regex},
+            {phoneNumber: regex},
+            {city: regex},
+            {address: regex}
+        ];
+        queryObject.$and[0].$or = orQuery;
+    }
     if(id){
-        queryObject._id = id;
+        if(mongoose.Types.ObjectId.isValid(id)){
+            queryObject.$and.push({
+                _id: mongoose.Types.ObjectId(id)
+            });
+        }
     }
     if(status){
-        queryObject.status = status;
+        queryObject.$and.push({
+            status: {
+                $regex: status,
+                $options: "i"
+            }
+        });
     }
     if(user){
-        queryObject.user = user;
+        if(mongoose.Types.ObjectId.isValid(user)){
+            queryObject.$and.push({
+                user: mongoose.Types.ObjectId(user)
+            });
+        }
     }
     result = result.find(queryObject);
     if(sort){

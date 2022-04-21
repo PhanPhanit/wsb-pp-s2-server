@@ -2,6 +2,7 @@ const Product = require('../models/Product');
 const Category = require('../models/Category');
 const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
+const mongoose = require('mongoose');
 
 
 const createProduct = async (req, res) => {
@@ -49,24 +50,58 @@ const createProduct = async (req, res) => {
 }
 
 const getAllProducts = async (req, res) => {
-    const {_id, name, category, sort, populate} = req.query;
-    let queryObject = {isShow: true};
+    const {id, name, category, sort, populate, search} = req.query;
+    let queryObject = {
+        $and: [
+            {
+                $or: [
+                    {name: new RegExp('', 'i')}
+                ]
+            },
+            {isShow: true}
+        ]
+    };
     let result = Product;
+    if(search){
+        let regex = new RegExp(search,'i');
+        let orQuery = [
+            {_id: mongoose.Types.ObjectId.isValid(search)?mongoose.Types.ObjectId(search):null},
+            {name: regex },
+            {author: regex},
+            {publisher: regex},
+            {language: regex},
+            {country: regex},
+            {published: regex},
+            {description: regex},
+        ];
+        queryObject.$and[0].$or = orQuery;
+    }
     if(name){
-        queryObject.name = {
-            $regex: name,
-            $options: "i"
-        }
+        queryObject.$and.push({
+            name: {
+                $regex: name,
+                $options: "i"
+            }
+        });
     }
     if(category){
-        queryObject.category = category;
+        queryObject.$and.push({
+            category: {
+                $regex: category,
+                $options: "i"
+            }
+        });
     }
-    if(_id){
-        queryObject._id = _id;
+    if(id){
+        if(mongoose.Types.ObjectId.isValid(id)){
+            queryObject.$and.push({
+                _id: mongoose.Types.ObjectId(id)
+            });
+        }
     }
     result = result.find(queryObject);
     if(populate){
-        result = result.populate(populate);
+        result = result.populate({path: populate, select: '-password'});
     }
     if(sort){
         result = result.sort(sort);
@@ -81,27 +116,66 @@ const getAllProducts = async (req, res) => {
 }
 
 const adminGetAllProducts = async (req, res) => {
-    const {_id, name, category, sort, isShow="all", populate} = req.query;
-    let queryObject = {};
-    if(isShow!=="all"){
-        queryObject.isShow = isShow;
-    }
+    const {id, name, category, sort, populate, search, isShow='all'} = req.query;
+    let queryObject = {
+        $and: [
+            {
+                $or: [
+                    {name: new RegExp('', 'i')}
+                ]
+            }
+        ]
+    };
     let result = Product;
-    if(name){
-        queryObject.name = {
-            $regex: name,
-            $options: "i"
+    if(search){
+        let regex = new RegExp(search,'i');
+        let orQuery = [
+            {_id: mongoose.Types.ObjectId.isValid(search)?mongoose.Types.ObjectId(search):null},
+            {name: regex },
+            {author: regex},
+            {publisher: regex},
+            {language: regex},
+            {country: regex},
+            {published: regex},
+            {description: regex},
+        ];
+        queryObject.$and[0].$or = orQuery;
+        if(search==='true' || search==='false'){
+            const isShow = search==='true'?true:false;
+            queryObject.$and[0].$or.push({isShow});
         }
     }
-    if(category){
-        queryObject.category = category;
+    if(name){
+        queryObject.$and.push({
+            name: {
+                $regex: name,
+                $options: "i"
+            }
+        });
     }
-    if(_id){
-        queryObject._id = _id;
+    if(category){
+        queryObject.$and.push({
+            category: {
+                $regex: category,
+                $options: "i"
+            }
+        });
+    }
+    if(id){
+        if(mongoose.Types.ObjectId.isValid(id)){
+            queryObject.$and.push({
+                _id: mongoose.Types.ObjectId(id)
+            });
+        }
+    }
+    if(isShow!=='all' && isShow!==''){
+        queryObject.$and.push({
+            isShow: isShow==='true'?true:false
+        });
     }
     result = result.find(queryObject);
     if(populate){
-        result = result.populate(populate);
+        result = result.populate({path: populate, select: '-password'});
     }
     if(sort){
         result = result.sort(sort);

@@ -3,30 +3,70 @@ const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
 const checkPermissions = require('../utils/checkPermissions');
 const { createTokenUser } = require('../utils');
+const mongoose = require('mongoose');
 
 
 
 const getAllUser = async (req, res) => {
-    const {id, name, email, isActive='all', role, sort} = req.query;
-    let queryObject = {};
+    const {id, name, email, isActive='all', role, sort, search} = req.query;
+    let queryObject = {
+        $and: [
+            {
+                $or: [
+                    {name: new RegExp('', 'i')}
+                ]
+            }
+        ]
+    };
     let result = User;
-    if(id){
-        queryObject._id = id;
-    }
-    if(name){
-        queryObject.name = {
-            $regex: name,
-            $options: "i"
+    if(search){
+        let regex = new RegExp(search,'i');
+        let orQuery = [
+            {_id: mongoose.Types.ObjectId.isValid(search)?mongoose.Types.ObjectId(search):null},
+            {name: regex },
+            {role: regex},
+            {email: regex},
+            {facebookId: regex},
+            {googleId: regex}
+        ];
+        queryObject.$and[0].$or = orQuery;
+        if(search==='true' || search==='false'){
+            const isActive = search==='true'?true:false;
+            queryObject.$and[0].$or.push({isActive});
         }
     }
+    if(id){
+        if(mongoose.Types.ObjectId.isValid(id)){
+            queryObject.$and.push({
+                _id: mongoose.Types.ObjectId(id)
+            });
+        }
+    }
+    if(name){
+        queryObject.$and.push({
+            name: {
+                $regex: name,
+                $options: "i"
+            }
+        });
+    }
     if(email){
-        queryObject.email = email;
+        queryObject.$and.push({
+            email: {
+                $regex: email,
+                $options: "i"
+            }
+        });
     }
     if(isActive!=='all' && isActive!==''){
-        queryObject.isActive = isActive==='true'?true:false;
+        queryObject.$and.push({
+            isActive: isActive==='true'?true:false
+        });
     }
     if(role){
-        queryObject.role = role;
+        queryObject.$and.push({
+            role
+        });
     }
     result = result.find(queryObject);
     if(sort){
