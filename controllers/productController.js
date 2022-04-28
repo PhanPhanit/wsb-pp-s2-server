@@ -63,9 +63,10 @@ const getAllProducts = async (req, res) => {
     };
     let result = Product;
     if(search){
+        const productObjectId = mongoose.Types.ObjectId.isValid(search)?mongoose.Types.ObjectId(search):null;
         let regex = new RegExp(search,'i');
         let orQuery = [
-            {_id: mongoose.Types.ObjectId.isValid(search)?mongoose.Types.ObjectId(search):null},
+            {_id: productObjectId},
             {name: regex },
             {author: regex},
             {publisher: regex},
@@ -85,12 +86,11 @@ const getAllProducts = async (req, res) => {
         });
     }
     if(category){
-        queryObject.$and.push({
-            category: {
-                $regex: category,
-                $options: "i"
-            }
-        });
+        if(mongoose.Types.ObjectId.isValid(category)){
+            queryObject.$and.push({
+                category: mongoose.Types.ObjectId(category)
+            });
+        }
     }
     if(id){
         if(mongoose.Types.ObjectId.isValid(id)){
@@ -138,6 +138,7 @@ const adminGetAllProducts = async (req, res) => {
             {country: regex},
             {published: regex},
             {description: regex},
+            {category: mongoose.Types.ObjectId.isValid(search)?mongoose.Types.ObjectId(search):null}
         ];
         queryObject.$and[0].$or = orQuery;
         if(search==='true' || search==='false'){
@@ -154,12 +155,11 @@ const adminGetAllProducts = async (req, res) => {
         });
     }
     if(category){
-        queryObject.$and.push({
-            category: {
-                $regex: category,
-                $options: "i"
-            }
-        });
+        if(mongoose.Types.ObjectId.isValid(category)){
+            queryObject.$and.push({
+                category: mongoose.Types.ObjectId(category)
+            });
+        }
     }
     if(id){
         if(mongoose.Types.ObjectId.isValid(id)){

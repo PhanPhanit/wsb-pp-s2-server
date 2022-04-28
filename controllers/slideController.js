@@ -71,7 +71,7 @@ const updateSlide = async (req, res) => {
     if(!title || !subtitle || isShow===undefined){
         throw new CustomError.BadRequestError("Please provide title, subtitle, and isShow fields");
     }
-    const slide = await Slide.findOne({_id: slideId});
+    const slide = await Slide.findOne({_id: slideId}).populate({path: "product", select: "image"});
     if(!slide){
         throw new CustomError.NotFoundError(`No slide with id: ${slideId}`);
     }

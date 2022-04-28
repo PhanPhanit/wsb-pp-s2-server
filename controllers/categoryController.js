@@ -4,8 +4,14 @@ const {StatusCodes} = require('http-status-codes');
 
 
 const createCategory = async (req, res) => {
+    const {name, image} = req.body;
+    if(!name){
+        throw new CustomError.BadRequestError('Please provide name field.');
+    }
+    if(!image){
+        throw new CustomError.BadRequestError('Please provide image field.');
+    }
     req.body.user = req.user.userId;
-    console.log(req.body);
     const category = await Category.create(req.body);
     res.status(StatusCodes.CREATED).json({category});
 }
@@ -55,7 +61,7 @@ const deleteCategory = async (req, res) => {
         throw new CustomError.NotFoundError(`No category with id: ${categoryId}`);
     }
     await category.remove();
-    res.status(StatusCodes.OK).json({msg: "Success! Product remove."});
+    res.status(StatusCodes.OK).json({msg: "Success! category remove."});
 }
 
 module.exports = {
