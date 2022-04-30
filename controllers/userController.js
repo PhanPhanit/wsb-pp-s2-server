@@ -1,8 +1,9 @@
 const User = require('../models/User');
+const Token = require('../models/Token');
 const {StatusCodes} = require('http-status-codes');
 const CustomError = require('../errors');
 const checkPermissions = require('../utils/checkPermissions');
-const { createTokenUser } = require('../utils');
+const { createTokenUser, attachCookiesToResponse } = require('../utils');
 const mongoose = require('mongoose');
 
 
@@ -98,9 +99,11 @@ const updateUser = async (req, res) => {
     if(!email || !name){
         throw new CustomError.BadRequestError("Please provide name and email.");
     }
-    const emailAlreadyExist = await User.findOne({email});
-    if(emailAlreadyExist){
-        throw new CustomError.BadRequestError("Email is already exist");
+    if(req.user.email !== email){
+        const emailAlreadyExist = await User.findOne({email});
+        if(emailAlreadyExist){
+            throw new CustomError.BadRequestError("Email is already exist");
+        }
     }
     const user = await User.findOne({_id: req.user.userId});
     if(user.googleId || user.facebookId){
@@ -109,7 +112,10 @@ const updateUser = async (req, res) => {
     user.name = name;
     user.email = email;
     await user.save();
-    res.status(StatusCodes.OK).json({user});
+    const tokenUser = createTokenUser(user);
+    const token = await Token.findOne({user: user._id});
+    attachCookiesToResponse({res, user:tokenUser, refreshToken: token.refreshToken});
+    res.status(StatusCodes.OK).json({user:tokenUser});
 }
 const adminUpdateUser = async (req, res) => {
     const {id: userId} = req.params;
