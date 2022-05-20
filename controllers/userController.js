@@ -6,8 +6,28 @@ const checkPermissions = require('../utils/checkPermissions');
 const { createTokenUser, attachCookiesToResponse } = require('../utils');
 const mongoose = require('mongoose');
 
-
-
+const createUser = async (req, res) => {
+    const {name, email, password, role='user', isActive=true} = req.body;
+    if(!name || !password){
+        throw new CustomError.BadRequestError("Please provide all value!");
+    }
+    // valid email
+    const emailRegex = /^[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com$/;
+    const isEmailMatch = email.match(emailRegex);
+    if(!isEmailMatch){
+        throw new CustomError.BadRequestError("Email plovided not valid");
+    }
+    // check email exist
+    const isEmailExist = await User.findOne({email});
+    if(isEmailExist){
+        throw new CustomError.BadRequestError("Email is already exist");
+    }
+    // const role = isFirstAccount ? "admin":"user";
+    const user = await User.create({name, email, password, role, isActive});
+    let tempUser = JSON.parse(JSON.stringify(user));
+    delete tempUser.password;
+    res.status(StatusCodes.CREATED).json({user: tempUser});
+}
 const getAllUser = async (req, res) => {
     const {id, name, email, isActive='all', role, sort, search} = req.query;
     let queryObject = {
@@ -78,13 +98,13 @@ const getAllUser = async (req, res) => {
     const limit = Number(req.query.limit) || 10;
     const skip = (page - 1) * limit;
     const totalPage = Math.ceil(totalUser / limit);
-    const user = await result.skip(skip).limit(limit).select('-password');
+    const user = await result.skip(skip).limit(limit).select('-password -passwordToken -passwordTokenExpirationDate');
     res.status(StatusCodes.OK).json({user, count: user.length, currentPage: page, totalPage, totalUser});
 
 }
 const getSingleUser = async (req, res) => {
     const {id} = req.params;
-    const user = await User.findOne({_id: id}).select('-password');
+    const user = await User.findOne({_id: id}).select('-password -passwordToken -passwordTokenExpirationDate');
     if(!user){
         throw new CustomError.NotFoundError(`No user width id : ${id}`);
     }
@@ -131,7 +151,7 @@ const adminUpdateUser = async (req, res) => {
             throw new CustomError.BadRequestError("Email is already exist");
         }
     }
-    const user = await User.findOne({_id:userId});
+    const user = await User.findOne({_id:userId}).select('-password -passwordToken -passwordTokenExpirationDate');
     if(!user){
         throw new CustomError.NotFoundError(`No user width id : ${userId}`);
     }
@@ -144,8 +164,7 @@ const adminUpdateUser = async (req, res) => {
         user.isActive = isActive;
     }
     await user.save();
-    const tokenUser = createTokenUser(user);
-    return res.status(StatusCodes.OK).json({user: tokenUser});
+    return res.status(StatusCodes.OK).json({user});
 }
 const updateUserPassword = async (req, res) => {
     const {oldPassword, newPassword} = req.body;
@@ -176,7 +195,15 @@ const countAllUser = async (req, res) => {
     const totalUser = await User.countDocuments(queryObject);
     return res.status(StatusCodes.OK).json({totalUser});
 }
-
+const deleteUser = async (req, res) => {
+    const {id: userId} = req.params;
+    const user = await User.findOne({_id: userId});
+    if(!user){
+        throw new CustomError.NotFoundError(`No user with id : ${userId}`);
+    }
+    await user.remove();
+    res.status(StatusCodes.OK).json({msg: "User has been deleted"});
+}
 
 module.exports = {
     getAllUser,
@@ -186,5 +213,7 @@ module.exports = {
     updateUser,
     updateUserPassword,
     adminUpdateUser,
-    countAllUser
+    countAllUser,
+    createUser,
+    deleteUser
 }

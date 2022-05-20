@@ -251,11 +251,11 @@
         }
 
         a[href]:after {
-            content: " ("attr(href) ")"
+            content: " (" attr(href) ")"
         }
 
         abbr[title]:after {
-            content: " ("attr(title) ")"
+            content: " (" attr(title) ")"
         }
 
         a[href^="javascript:"]:after,
@@ -8405,6 +8405,7 @@
                 <ul>
                     <li><strong><a href=#Auth>Auth</a></strong>
                         <ul>
+                            <li><a class=endpoint_menu href=#jump-Auth-ForgetPassword>Forget Password</a>
                             <li><a class=endpoint_menu href=#jump-Auth-Login>Login</a>
                             <li><a class=endpoint_menu href=#jump-Auth-Logout>Logout</a>
                             <li><a class=endpoint_menu href=#jump-Auth-Register>Register</a>
@@ -8428,7 +8429,9 @@
                             <li><a class=endpoint_menu href=#jump-Order-CreateOrder>Create Order</a>
                             <li><a class=endpoint_menu href=#jump-Order-GetAllOrder>Get All Order</a>
                             <li><a class=endpoint_menu href=#jump-Order-GetSinlgeOrder>Get Sinlge Order</a>
-                            <li><a class=endpoint_menu href=#jump-Order-ShoAllMyOrder>Sho All My Order</a>
+                            <li><a class=endpoint_menu href=#jump-Order-GetTotalOrder>Get Total Order</a>
+                            <li><a class=endpoint_menu href=#jump-Order-GetTotalPrice>Get Total Price</a>
+                            <li><a class=endpoint_menu href=#jump-Order-ShowAllMyOrder>Show All My Order</a>
                             <li><a class=endpoint_menu href=#jump-Order-UpdateOrder>Update Order</a>
                         </ul>
                     <li><strong><a href=#OrderItem>Order Item</a></strong>
@@ -8450,7 +8453,12 @@
                             <li><a class=endpoint_menu href=#jump-Product-DeleteProduct>Delete Product</a>
                             <li><a class=endpoint_menu href=#jump-Product-GetAllProduct>Get All Product</a>
                             <li><a class=endpoint_menu href=#jump-Product-GetSingleProduct>Get Single Product</a>
+                            <li><a class=endpoint_menu href=#jump-Product-IncreaseViewProduct>Increase View Product</a>
                             <li><a class=endpoint_menu href=#jump-Product-UpdateProduct>Update Product</a>
+                        </ul>
+                    <li><strong><a href=#ResponseCookie>Response Cookie</a></strong>
+                        <ul>
+                            <li><a class=endpoint_menu href=#jump-ResponseCookie-Cookie>Cookie</a>
                         </ul>
                     <li><strong><a href=#Review>Review</a></strong>
                         <ul>
@@ -8478,6 +8486,8 @@
                     <li><strong><a href=#User>User</a></strong>
                         <ul>
                             <li><a class=endpoint_menu href=#jump-User-AdminUpdateAllUser>Admin Update All User</a>
+                            <li><a class=endpoint_menu href=#jump-User-CountAllUser>Count All User</a>
+                            <li><a class=endpoint_menu href=#jump-User-CreateUser>Create User</a>
                             <li><a class=endpoint_menu href=#jump-User-GetAllUsers>Get All Users</a>
                             <li><a class=endpoint_menu href=#jump-User-GetSingleUser>Get Single User</a>
                             <li><a class=endpoint_menu href=#jump-User-ShowcurrentUser>Show current User</a>
@@ -8490,13 +8500,35 @@
                 <div class="panel panel-default">
                     <div class=panel-heading>
                         <h3 class=panel-title id=Auth>Auth
-                            <span class=badge>3</span>
+                            <span class=badge>4</span>
                         </h3>
                     </div>
                     <div class=panel-body>
                         <p>
                         <div class=request-item>
                             <div class=panel-group id=accordion-Auth>
+                                <div class="panel panel-success" id=jump-Auth-ForgetPassword>
+                                    <div class=panel-heading><small class="pull-right text-muted">raw</small>
+                                        <a class=text-success data-toggle=collapse data-parent=#accordion-Auth
+                                            href=#collapse-Auth-ForgetPassword>
+                                            <h4 class=panel-title><span
+                                                    class="glyphicon glyphicon-plus"></span><strong>Forget
+                                                    Password</strong> &nbsp;|&nbsp;
+                                                <strong class="request-method border-success">POST</strong>
+                                                &nbsp;
+                                                {{URL}}/auth/forgot-password
+                                            </h4>
+                                        </a>
+                                    </div>
+                                    <div id=collapse-Auth-ForgetPassword class="panel-collapse collapse">
+                                        <div class=panel-body>
+                                            <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
+                                                &#34;email&#34;: &#34;phanphanit.pp12345@gmail.com&#34;
+                                                }</span>
+                                            <div class=clearfix></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="panel panel-success" id=jump-Auth-Login>
                                     <div class=panel-heading><small class="pull-right text-muted">raw</small>
                                         <a class=text-success data-toggle=collapse data-parent=#accordion-Auth
@@ -8506,7 +8538,7 @@
                                                 &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/auth/login
+                                                {{URL}}/auth/login
                                             </h4>
                                         </a>
                                     </div>
@@ -8514,22 +8546,22 @@
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
                                                 &#34;email&#34;: &#34;phanphanit@gmail.com&#34;,
-                                                &#34;password&#34;: &#34;Phannit123#&#34;
+                                                &#34;password&#34;: &#34;secret&#34;
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="panel panel-info" id=jump-Auth-Logout>
+                                <div class="panel panel-danger" id=jump-Auth-Logout>
                                     <div class=panel-heading><small class="pull-right text-muted"></small><a
-                                            class=text-info data-toggle=collapse data-parent=#accordion-Auth
+                                            class=text-danger data-toggle=collapse data-parent=#accordion-Auth
                                             href=#collapse-Auth-Logout>
                                             <h4 class=panel-title><span
                                                     class="glyphicon glyphicon-plus"></span><strong>Logout</strong>
                                                 &nbsp;|&nbsp;
-                                                <strong class="request-method border-info">GET</strong>
+                                                <strong class="request-method border-danger">DELETE</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/auth/logout
+                                                {{URL}}/auth/logout
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Auth-Logout class="panel-collapse collapse">
@@ -8545,16 +8577,16 @@
                                                 &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/auth/register
+                                                {{URL}}/auth/register
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-Auth-Register class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;name&#34;: &#34;Phan Phanit&#34;,
-                                                &#34;email&#34;: &#34;phanphanit2@gmail.com&#34;,
-                                                &#34;password&#34;: &#34;secret&#34;
+                                                &#34;name&#34;: &#34;Admin&#34;,
+                                                &#34;email&#34;: &#34;adminnnn@gmail.com&#34;,
+                                                &#34;password&#34;: &#34;admin&#34;
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
@@ -8583,11 +8615,25 @@
                                                     Category</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/category/all
+                                                {{URL}}/wsb-cate/all
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Category-AdminGetAllCategory class="panel-collapse collapse">
-                                        <div class=panel-body></div>
+                                        <div class=panel-body>
+                                            <h5 class="label label-info">Query</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>isShow
+                                                        <td>true
+                                                        <td>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-success" id=jump-Category-CreateCategory>
@@ -8599,15 +8645,16 @@
                                                     Category</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/category
+                                                {{URL}}/wsb-cate
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-Category-CreateCategory class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;name&#34;: &#34;Finance fdgdsfdsfdsfdsfsdf sdfefsdfsdfsdfs&#34;,
-                                                &#34;image&#34;: &#34;123.jpg&#34;
+                                                &#34;name&#34;: &#34;Romance test&#34;,
+                                                &#34;image&#34;:
+                                                &#34;https://e7.pngegg.com/pngimages/880/605/png-clipart-heart-shape-symbol-heart-love-heart.png&#34;
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
@@ -8622,7 +8669,7 @@
                                                     Category</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-danger">DELETE</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/category/61c0370e921d73f2f9a447a8
+                                                {{URL}}/wsb-cate/61c0370e921d73f2f9a447a8
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Category-DeleteCategory class="panel-collapse collapse">
@@ -8638,7 +8685,7 @@
                                                     Category</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/category
+                                                {{URL}}/wsb-cate
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Category-GetAllCategory class="panel-collapse collapse">
@@ -8654,15 +8701,16 @@
                                                     Category</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-warning">PATCH</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/category/61c038e2921d73f2f9a447aa
+                                                {{URL}}/wsb-cate/6263fe44cdd553aa3e3b06ff
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-Category-UpdateCategory class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;name&#34;: &#34;Fanance 1&#34;,
-                                                &#34;image&#34;: &#34;upload/cate.png&#34;,
+                                                &#34;name&#34;: &#34;Romance&#34;,
+                                                &#34;image&#34;:
+                                                &#34;https://cdn-icons-png.flaticon.com/512/1692/1692130.png&#34;,
                                                 &#34;isShow&#34;: true
                                                 }</span>
                                             <div class=clearfix></div>
@@ -8684,8 +8732,8 @@
                         <div class=request-item>
                             <div class=panel-group id=accordion-CheckOutWithStripe>
                                 <div class="panel panel-success" id=jump-CheckOutWithStripe-CreatePaymentIntent>
-                                    <div class=panel-heading><small class="pull-right text-muted"></small><a
-                                            class=text-success data-toggle=collapse
+                                    <div class=panel-heading><small class="pull-right text-muted">raw</small>
+                                        <a class=text-success data-toggle=collapse
                                             data-parent=#accordion-CheckOutWithStripe
                                             href=#collapse-CheckOutWithStripe-CreatePaymentIntent>
                                             <h4 class=panel-title><span
@@ -8693,12 +8741,18 @@
                                                     Intent</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/checkout/create-payment-intent
+                                                {{URL}}/wsb-ch-out/create-payment-intent
                                             </h4>
-                                        </a></div>
+                                        </a>
+                                    </div>
                                     <div id=collapse-CheckOutWithStripe-CreatePaymentIntent
                                         class="panel-collapse collapse">
-                                        <div class=panel-body></div>
+                                        <div class=panel-body>
+                                            <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
+                                                &#34;price&#34;: 10000
+                                                }</span>
+                                            <div class=clearfix></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -8708,7 +8762,7 @@
                 <div class="panel panel-default">
                     <div class=panel-heading>
                         <h3 class=panel-title id=Order>Order
-                            <span class=badge>5</span>
+                            <span class=badge>7</span>
                         </h3>
                     </div>
                     <div class=panel-body>
@@ -8724,7 +8778,7 @@
                                                     Order</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order
+                                                {{URL}}/wsb-od
                                             </h4>
                                         </a>
                                     </div>
@@ -8732,6 +8786,11 @@
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
                                                 &#34;delivery&#34;: 2,
+                                                &#34;paymentIntent&#34;: &#34;test&#34;,
+                                                &#34;phoneNumber&#34;: &#34;011336353&#34;,
+                                                &#34;city&#34;: &#34;Phnom Penh&#34;,
+                                                &#34;address&#34;: &#34;st 191&#34;,
+                                                &#34;orderDate&#34;: &#34;2022-01-02&#34;,
                                                 &#34;orderItem&#34;: [
                                                 {
                                                 &#34;name&#34;: &#34;Product1&#34;,
@@ -8739,39 +8798,7 @@
                                                 &#34;price&#34;: 25,
                                                 &#34;discount&#34;: 10,
                                                 &#34;quantity&#34;: 2,
-                                                &#34;product&#34;: &#34;61c5b879000a88a9caf47180&#34;
-                                                },
-                                                {
-                                                &#34;name&#34;: &#34;Product1&#34;,
-                                                &#34;image&#34;:&#34;example.png&#34;,
-                                                &#34;price&#34;: 25,
-                                                &#34;discount&#34;: 10,
-                                                &#34;quantity&#34;: 2,
-                                                &#34;product&#34;: &#34;61c5b879000a88a9caf47182&#34;
-                                                },
-                                                {
-                                                &#34;name&#34;: &#34;Product1&#34;,
-                                                &#34;image&#34;:&#34;example.png&#34;,
-                                                &#34;price&#34;: 25,
-                                                &#34;discount&#34;: 10,
-                                                &#34;quantity&#34;: 2,
-                                                &#34;product&#34;: &#34;61c5b879000a88a9caf47184&#34;
-                                                },
-                                                {
-                                                &#34;name&#34;: &#34;Product1&#34;,
-                                                &#34;image&#34;:&#34;example.png&#34;,
-                                                &#34;price&#34;: 25,
-                                                &#34;discount&#34;: 10,
-                                                &#34;quantity&#34;: 2,
-                                                &#34;product&#34;: &#34;61c5b87a000a88a9caf47186&#34;
-                                                },
-                                                {
-                                                &#34;name&#34;: &#34;Product1&#34;,
-                                                &#34;image&#34;:&#34;example.png&#34;,
-                                                &#34;price&#34;: 25,
-                                                &#34;discount&#34;: 10,
-                                                &#34;quantity&#34;: 2,
-                                                &#34;product&#34;: &#34;61c5b87a000a88a9caf47188&#34;
+                                                &#34;product&#34;: &#34;624854dfa8b26a84dc8509c1&#34;
                                                 }
                                                 ]
                                                 }</span>
@@ -8788,25 +8815,11 @@
                                                     Order</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order
+                                                {{URL}}/wsb-od
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Order-GetAllOrder class="panel-collapse collapse">
-                                        <div class=panel-body>
-                                            <h5 class="label label-info">Query</h5>
-                                            <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Key
-                                                        <th>Value
-                                                        <th>Description
-                                                <tbody>
-                                                    <tr>
-                                                        <td>_id
-                                                        <td>61d2f91f64d68b7b804d79f8
-                                                        <td>
-                                            </table>
-                                        </div>
+                                        <div class=panel-body></div>
                                     </div>
                                 </div>
                                 <div class="panel panel-info" id=jump-Order-GetSinlgeOrder>
@@ -8818,27 +8831,127 @@
                                                     Order</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order/61d2fda7e224988dc40811d5
+                                                {{URL}}/wsb-od/61d2fda7e224988dc40811d5
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Order-GetSinlgeOrder class="panel-collapse collapse">
                                         <div class=panel-body></div>
                                     </div>
                                 </div>
-                                <div class="panel panel-info" id=jump-Order-ShoAllMyOrder>
+                                <div class="panel panel-info" id=jump-Order-GetTotalOrder>
                                     <div class=panel-heading><small class="pull-right text-muted"></small><a
                                             class=text-info data-toggle=collapse data-parent=#accordion-Order
-                                            href=#collapse-Order-ShoAllMyOrder>
+                                            href=#collapse-Order-GetTotalOrder>
                                             <h4 class=panel-title><span
-                                                    class="glyphicon glyphicon-plus"></span><strong>Sho All My
+                                                    class="glyphicon glyphicon-plus"></span><strong>Get Total
                                                     Order</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order/show-all-my-order
+                                                {{URL}}/wsb-od/get-total-order
                                             </h4>
                                         </a></div>
-                                    <div id=collapse-Order-ShoAllMyOrder class="panel-collapse collapse">
-                                        <div class=panel-body></div>
+                                    <div id=collapse-Order-GetTotalOrder class="panel-collapse collapse">
+                                        <div class=panel-body>
+                                            <h5 class="label label-warning">Headers</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Accept
+                                                        <td>application/json
+                                                        <td>
+                                            </table>
+                                            <h5 class="label label-info">Query</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>status
+                                                        <td>success
+                                                        <td>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-info" id=jump-Order-GetTotalPrice>
+                                    <div class=panel-heading><small class="pull-right text-muted"></small><a
+                                            class=text-info data-toggle=collapse data-parent=#accordion-Order
+                                            href=#collapse-Order-GetTotalPrice>
+                                            <h4 class=panel-title><span
+                                                    class="glyphicon glyphicon-plus"></span><strong>Get Total
+                                                    Price</strong> &nbsp;|&nbsp;
+                                                <strong class="request-method border-info">GET</strong>
+                                                &nbsp;
+                                                {{URL}}/wsb-od/get-total-price
+                                            </h4>
+                                        </a></div>
+                                    <div id=collapse-Order-GetTotalPrice class="panel-collapse collapse">
+                                        <div class=panel-body>
+                                            <h5 class="label label-warning">Headers</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Accept
+                                                        <td>application/json
+                                                        <td>
+                                            </table>
+                                            <h5 class="label label-info">Query</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>status
+                                                        <td>success
+                                                        <td>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-info" id=jump-Order-ShowAllMyOrder>
+                                    <div class=panel-heading><small class="pull-right text-muted"></small><a
+                                            class=text-info data-toggle=collapse data-parent=#accordion-Order
+                                            href=#collapse-Order-ShowAllMyOrder>
+                                            <h4 class=panel-title><span
+                                                    class="glyphicon glyphicon-plus"></span><strong>Show All My
+                                                    Order</strong> &nbsp;|&nbsp;
+                                                <strong class="request-method border-info">GET</strong>
+                                                &nbsp;
+                                                {{URL}}/wsb-od/show-all-my-order
+                                            </h4>
+                                        </a></div>
+                                    <div id=collapse-Order-ShowAllMyOrder class="panel-collapse collapse">
+                                        <div class=panel-body>
+                                            <h5 class="label label-info">Query</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>status
+                                                        <td>success
+                                                        <td>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-warning" id=jump-Order-UpdateOrder>
@@ -8850,14 +8963,14 @@
                                                     Order</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-warning">PATCH</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order/61d2fda7e224988dc40811d5
+                                                {{URL}}/wsb-od/625f6dafa696768e0eced88c
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-Order-UpdateOrder class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;status&#34;: &#34;confirm&#34;
+                                                &#34;status&#34;: &#34;success&#34;
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
@@ -8886,16 +8999,17 @@
                                                     Item</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order-item
+                                                {{URL}}/wsb-od-item
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-OrderItem-CreateOrderItem class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;image&#34;: &#34;dddd&#34;,
+                                                &#34;image&#34;:
+                                                &#34;https://m.media-amazon.com/images/I/71uWP+f-EsL._AC_UY327_FMwebp_QL65_.jpg&#34;,
                                                 &#34;quantity&#34;: 1,
-                                                &#34;product&#34;: &#34;61c5b87a000a88a9caf47188&#34;
+                                                &#34;product&#34;: &#34;61decaa526248196e11edc76&#34;
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
@@ -8910,7 +9024,7 @@
                                                     Item</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-danger">DELETE</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order-item
+                                                {{URL}}/wsb-od-item
                                             </h4>
                                         </a></div>
                                     <div id=collapse-OrderItem-DeleteManyOrderItem class="panel-collapse collapse">
@@ -8926,7 +9040,7 @@
                                                     Item</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-danger">DELETE</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order-item/61d1284ed58600e63e67ea73
+                                                {{URL}}/wsb-od-item/61e186c22575bc4c66185aa7
                                             </h4>
                                         </a></div>
                                     <div id=collapse-OrderItem-DeleteOrderItem class="panel-collapse collapse">
@@ -8942,7 +9056,7 @@
                                                     Item</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order-item
+                                                {{URL}}/wsb-od-item
                                             </h4>
                                         </a></div>
                                     <div id=collapse-OrderItem-GetOrderItem class="panel-collapse collapse">
@@ -8958,7 +9072,7 @@
                                                     Item</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order-item/61d12aa1fcdc70a636a2b0e3
+                                                {{URL}}/wsb-od-item/61e1404ee2c96f3f7b63a0c4
                                             </h4>
                                         </a></div>
                                     <div id=collapse-OrderItem-GetSingleItem class="panel-collapse collapse">
@@ -8974,14 +9088,14 @@
                                                     Item</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-warning">PATCH</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/order-item/61d1284ed58600e63e67ea73
+                                                {{URL}}/wsb-od-item/61e1404ee2c96f3f7b63a0c4
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-OrderItem-UpdateOrderItem class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;quantity&#34;: 17
+                                                &#34;quantity&#34;: 2
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
@@ -8994,7 +9108,7 @@
                 <div class="panel panel-default">
                     <div class=panel-heading>
                         <h3 class=panel-title id=Product>Product
-                            <span class=badge>7</span>
+                            <span class=badge>8</span>
                         </h3>
                     </div>
                     <div class=panel-body>
@@ -9010,11 +9124,25 @@
                                                     Products</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/product/all
+                                                {{URL}}/wsb-pro/all
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Product-AdminGetAllProducts class="panel-collapse collapse">
-                                        <div class=panel-body></div>
+                                        <div class=panel-body>
+                                            <h5 class="label label-info">Query</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>search
+                                                        <td>wa
+                                                        <td>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-info" id=jump-Product-AdminGetSingleProduct>
@@ -9026,7 +9154,7 @@
                                                     Product</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/product/61c5b878000a88a9caf4717c/admin
+                                                {{URL}}/wsb-pro/61c5b878000a88a9caf4717c/admin
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Product-AdminGetSingleProduct class="panel-collapse collapse">
@@ -9042,32 +9170,34 @@
                                                     Product</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/product
+                                                {{URL}}/wsb-pro
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-Product-CreateProduct class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;name&#34;: &#34;Product 101&#34;,
-                                                &#34;price&#34;: 29.99,
-                                                &#34;discount&#34;: 10,
-                                                &#34;author&#34;: &#34;Transi Ated&#34;,
+                                                &#34;name&#34;: &#34;Engaging Lord Charles: A Regency Romance&#34;,
+                                                &#34;price&#34;: 15.55,
+                                                &#34;discount&#34;: 1,
+                                                &#34;author&#34;: &#34;Laura Beers&#34;,
                                                 &#34;publisher&#34;: &#34;Jim Date (Narrator), Pottermore
                                                 Publishing&#34;,
                                                 &#34;genre&#34;: &#34;Fansty&#34;,
                                                 &#34;language&#34;: &#34;English&#34;,
-                                                &#34;country&#34;: &#34;United Kingdom&#34;,
-                                                &#34;published&#34;: &#34;Semtember 22, 2001&#34;,
-                                                &#34;description&#34;: &#34;Lorem ipsum dolor sit amet consectetur
-                                                adipiscing elit, dui curabitur lectus ullamcorper cras placerat taciti
-                                                justo, libero conubia eleifend maecenas arcu eu&#34;,
+                                                &#34;country&#34;: &#34;United State&#34;,
+                                                &#34;published&#34;: &#34;Semtember 25, 2018&#34;,
+                                                &#34;description&#34;: &#34;Miss Henrietta Whiston could only be
+                                                considered unlucky. She didn’t seek out misfortune, but it always seemed
+                                                to find her. When her sister asks her to engage Lord Charles so she may
+                                                entertain two suitors of her own, Henrietta is reluctant, despite
+                                                finding herself intrigued by this man who loves antiquities.&#34;,
                                                 &#34;image&#34;: [
-                                                &#34;example.jpg&#34;,
-                                                &#34;example1.png&#34;,
-                                                &#34;example2.jpg&#34;
+                                                &#34;https://m.media-amazon.com/images/I/51luDrX+g-S.jpg&#34;,
+                                                &#34;https://botnik.org/content/hp02.jpg&#34;,
+                                                &#34;https://i.pinimg.com/236x/fd/2e/c5/fd2ec5d3a2c6b242cc79ba1960dcd150.jpg&#34;
                                                 ],
-                                                &#34;category&#34;: &#34;61c038e2921d73f2f9a447aa&#34;
+                                                &#34;category&#34;: &#34;61d574b920fbf55e2d5aa188&#34;
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
@@ -9082,7 +9212,7 @@
                                                     Product</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-danger">DELETE</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/product/61c5b879000a88a9caf4717e
+                                                {{URL}}/wsb-pro/61c5b879000a88a9caf4717e
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Product-DeleteProduct class="panel-collapse collapse">
@@ -9098,7 +9228,7 @@
                                                     Product</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/product
+                                                {{URL}}/wsb-pro
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Product-GetAllProduct class="panel-collapse collapse">
@@ -9112,8 +9242,8 @@
                                                         <th>Description
                                                 <tbody>
                                                     <tr>
-                                                        <td>limit
-                                                        <td>25
+                                                        <td>search
+                                                        <td>61d6bb3570e3b877e530c14f
                                                         <td>
                                             </table>
                                         </div>
@@ -9128,10 +9258,26 @@
                                                     Product</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/product/61c5b878000a88a9caf4717c
+                                                {{URL}}/wsb-pro/625f6e538a2bf3e1903e71be
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Product-GetSingleProduct class="panel-collapse collapse">
+                                        <div class=panel-body></div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-info" id=jump-Product-IncreaseViewProduct>
+                                    <div class=panel-heading><small class="pull-right text-muted"></small><a
+                                            class=text-info data-toggle=collapse data-parent=#accordion-Product
+                                            href=#collapse-Product-IncreaseViewProduct>
+                                            <h4 class=panel-title><span
+                                                    class="glyphicon glyphicon-plus"></span><strong>Increase View
+                                                    Product</strong> &nbsp;|&nbsp;
+                                                <strong class="request-method border-info">GET</strong>
+                                                &nbsp;
+                                                {{URL}}/wsb-pro/increase-view/61d57a33a2ecdb0429b72e2c
+                                            </h4>
+                                        </a></div>
+                                    <div id=collapse-Product-IncreaseViewProduct class="panel-collapse collapse">
                                         <div class=panel-body></div>
                                     </div>
                                 </div>
@@ -9144,14 +9290,51 @@
                                                     Product</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-warning">PATCH</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/product/61c5b879000a88a9caf47180
+                                                {{URL}}/wsb-pro/61d57b28a2ecdb0429b72e2f
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-Product-UpdateProduct class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;isShow&#34;: true
+                                                &#34;sold&#34;: 110
+                                                }</span>
+                                            <div class=clearfix></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class=panel-heading>
+                        <h3 class=panel-title id=ResponseCookie>Response Cookie
+                            <span class=badge>1</span>
+                        </h3>
+                    </div>
+                    <div class=panel-body>
+                        <p>
+                        <div class=request-item>
+                            <div class=panel-group id=accordion-ResponseCookie>
+                                <div class="panel panel-success" id=jump-ResponseCookie-Cookie>
+                                    <div class=panel-heading><small class="pull-right text-muted">raw</small>
+                                        <a class=text-success data-toggle=collapse data-parent=#accordion-ResponseCookie
+                                            href=#collapse-ResponseCookie-Cookie>
+                                            <h4 class=panel-title><span
+                                                    class="glyphicon glyphicon-plus"></span><strong>Cookie</strong>
+                                                &nbsp;|&nbsp;
+                                                <strong class="request-method border-success">POST</strong>
+                                                &nbsp;
+                                                {{URL}}/wsb-res-cookie
+                                            </h4>
+                                        </a>
+                                    </div>
+                                    <div id=collapse-ResponseCookie-Cookie class="panel-collapse collapse">
+                                        <div class=panel-body>
+                                            <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
+                                                &#34;token&#34;:
+                                                &#34;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWQ1NjdkOTgwNDNhMGM0YzM1OTJiZmYiLCJuYW1lIjoiUEhBTiBQSEFOSVQiLCJlbWFpbCI6InBoYW5waGFuaXQucHAxMjM0NUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiIsImdvb2dsZUlkIjoiMTA1MzA3NTQ0NjE1NzM0MjEyMzUxIiwiZmFjZWJvb2tJZCI6IiIsInJvbGUiOiJ1c2VyIiwiaXNBY3RpdmUiOnRydWUsIl9fdiI6MCwiaWF0IjoxNjQ3MTc4NjIyLCJleHAiOjE2NDg5Nzg2MjJ9.cqp5ol98t8o4xpJUkXq8hHdCJBjChjNivXlOheudlaM&#34;
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
@@ -9180,7 +9363,7 @@
                                                     Review</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/review
+                                                {{URL}}/wsb-rev
                                             </h4>
                                         </a>
                                     </div>
@@ -9188,8 +9371,10 @@
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
                                                 &#34;rating&#34;: 5,
-                                                &#34;comment&#34;: &#34;good 5&#34;,
-                                                &#34;product&#34;: &#34;61c5b879000a88a9caf47182&#34;
+                                                &#34;comment&#34;: &#34;Lorem ipsum dolor sit amet consectetur
+                                                adipiscing elit dapibus, accumsan nec mauris conubia montes auctor enim
+                                                magnis.&#34;,
+                                                &#34;product&#34;: &#34;61d6b51070e3b877e530c0de&#34;
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
@@ -9204,7 +9389,7 @@
                                                     Review</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-danger">DELETE</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/review/61cbff81c8a3ac6738335a24
+                                                {{URL}}/wsb-rev/61cbff81c8a3ac6738335a24
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Review-DeleteReview class="panel-collapse collapse">
@@ -9220,7 +9405,7 @@
                                                     Review</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/review
+                                                {{URL}}/wsb-rev
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Review-GetAllReview class="panel-collapse collapse">
@@ -9235,11 +9420,23 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>product
-                                                        <td>61c5b879000a88a9caf47180
+                                                        <td>61d8ee5815b358aa6f9dc623
                                                         <td>
                                                     <tr>
                                                         <td>limit
-                                                        <td>100
+                                                        <td>4
+                                                        <td>
+                                                    <tr>
+                                                        <td>page
+                                                        <td>1
+                                                        <td>
+                                                    <tr>
+                                                        <td>populate
+                                                        <td>user
+                                                        <td>
+                                                    <tr>
+                                                        <td>rating
+                                                        <td>4
                                                         <td>
                                             </table>
                                         </div>
@@ -9254,7 +9451,7 @@
                                                     Review</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/review/61cbff81c8a3ac6738335a24
+                                                {{URL}}/wsb-rev/61cbff81c8a3ac6738335a24
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Review-GetSingleReview class="panel-collapse collapse">
@@ -9270,7 +9467,7 @@
                                                     Percent</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/review/star-percent/61c5b879000a88a9caf47180
+                                                {{URL}}/wsb-rev/star-percent/61dfadb458e1f8b04146d36f
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Review-StarPercent class="panel-collapse collapse">
@@ -9286,7 +9483,7 @@
                                                     Review</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-warning">PATCH</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/review/61cbff81c8a3ac6738335a24
+                                                {{URL}}/wsb-rev/61cbff81c8a3ac6738335a24
                                             </h4>
                                         </a>
                                     </div>
@@ -9323,7 +9520,7 @@
                                                     Slide</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/slide/admin
+                                                {{URL}}/wsb-slide/admin
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Slide-AdminGetAllSlide class="panel-collapse collapse">
@@ -9337,8 +9534,8 @@
                                                         <th>Description
                                                 <tbody>
                                                     <tr>
-                                                        <td>isShow
-                                                        <td>false
+                                                        <td>sort
+                                                        <td>-createdAt
                                                         <td>
                                             </table>
                                         </div>
@@ -9353,16 +9550,17 @@
                                                     Slide</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/slide
+                                                {{URL}}/wsb-slide
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-Slide-CreateSlide class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;title&#34;: &#34;title3&#34;,
-                                                &#34;subtitle&#34;: &#34;subtitle3&#34;,
-                                                &#34;product&#34;: &#34;61c5b879000a88a9caf47184&#34;
+                                                &#34;title&#34;: &#34;Discover Your Unlimited Knowledge&#34;,
+                                                &#34;subtitle&#34;: &#34;A new world contains in each every pages of the
+                                                books&#34;,
+                                                &#34;product&#34;: &#34;61d8ee5815b358aa6f9dc623&#34;
                                                 }</span>
                                             <div class=clearfix></div>
                                         </div>
@@ -9377,7 +9575,7 @@
                                                     Slide</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-danger">DELETE</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/slide/61d3b78ee3024c374e4403a3
+                                                {{URL}}/wsb-slide/61ded5ca26248196e11edcfb
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Slide-DeleteSlide class="panel-collapse collapse">
@@ -9393,11 +9591,29 @@
                                                     Slide</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/slide
+                                                {{URL}}/wsb-slide
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Slide-GetAllSlide class="panel-collapse collapse">
-                                        <div class=panel-body></div>
+                                        <div class=panel-body>
+                                            <h5 class="label label-info">Query</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>limit
+                                                        <td>5
+                                                        <td>
+                                                    <tr>
+                                                        <td>sort
+                                                        <td>-createdAt
+                                                        <td>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-info" id=jump-Slide-GetSingleSlide>
@@ -9409,7 +9625,7 @@
                                                     Slide</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/slide/61d3b78ee3024c374e4403a3
+                                                {{URL}}/wsb-slide/61d3b78ee3024c374e4403a3
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Slide-GetSingleSlide class="panel-collapse collapse">
@@ -9425,7 +9641,7 @@
                                                     Slide</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-warning">PATCH</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/slide/61d3b78ee3024c374e4403a3
+                                                {{URL}}/wsb-slide/61d3b78ee3024c374e4403a3
                                             </h4>
                                         </a>
                                     </div>
@@ -9463,7 +9679,7 @@
                                                     Cloud</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/upload/upload-cloud
+                                                {{URL}}/wsb-upload/upload-cloud
                                             </h4>
                                         </a>
                                     </div>
@@ -9494,7 +9710,7 @@
                                                     Local</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/upload/upload-local
+                                                {{URL}}/wsb-upload/upload-local
                                             </h4>
                                         </a>
                                     </div>
@@ -9523,7 +9739,7 @@
                 <div class="panel panel-default">
                     <div class=panel-heading>
                         <h3 class=panel-title id=User>User
-                            <span class=badge>6</span>
+                            <span class=badge>8</span>
                         </h3>
                     </div>
                     <div class=panel-body>
@@ -9539,15 +9755,88 @@
                                                     User</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-warning">PATCH</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/users/61d3f8d37a321fe0b291c555
+                                                {{URL}}/users/61d56b088043a0c4c3592c34
                                             </h4>
                                         </a>
                                     </div>
                                     <div id=collapse-User-AdminUpdateAllUser class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-                                                &#34;name&#34;: &#34;Phan Phanit1111&#34;,
-                                                &#34;email&#34;: &#34;phanphanit1@gmail.com&#34;,
+                                                &#34;name&#34;: &#34;Phan Phanit&#34;,
+                                                &#34;email&#34;: &#34;phanphanit@gmail.com&#34;,
+                                                &#34;role&#34;: &#34;admin&#34;,
+                                                &#34;isActive&#34;: true
+                                                }</span>
+                                            <div class=clearfix></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-info" id=jump-User-CountAllUser>
+                                    <div class=panel-heading><small class="pull-right text-muted"></small><a
+                                            class=text-info data-toggle=collapse data-parent=#accordion-User
+                                            href=#collapse-User-CountAllUser>
+                                            <h4 class=panel-title><span
+                                                    class="glyphicon glyphicon-plus"></span><strong>Count All
+                                                    User</strong> &nbsp;|&nbsp;
+                                                <strong class="request-method border-info">GET</strong>
+                                                &nbsp;
+                                                {{URL}}/users/count-all-user
+                                            </h4>
+                                        </a></div>
+                                    <div id=collapse-User-CountAllUser class="panel-collapse collapse">
+                                        <div class=panel-body>
+                                            <h5 class="label label-warning">Headers</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Accept
+                                                        <td>application/json
+                                                        <td>
+                                            </table>
+                                            <h5 class="label label-info">Query</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>role
+                                                        <td>user
+                                                        <td>
+                                                    <tr>
+                                                        <td>isActive
+                                                        <td>true
+                                                        <td>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-success" id=jump-User-CreateUser>
+                                    <div class=panel-heading><small class="pull-right text-muted">raw</small>
+                                        <a class=text-success data-toggle=collapse data-parent=#accordion-User
+                                            href=#collapse-User-CreateUser>
+                                            <h4 class=panel-title><span
+                                                    class="glyphicon glyphicon-plus"></span><strong>Create User</strong>
+                                                &nbsp;|&nbsp;
+                                                <strong class="request-method border-success">POST</strong>
+                                                &nbsp;
+                                                {{URL}}/users
+                                            </h4>
+                                        </a>
+                                    </div>
+                                    <div id=collapse-User-CreateUser class="panel-collapse collapse">
+                                        <div class=panel-body>
+                                            <h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
+                                                &#34;name&#34;: &#34;Test&#34;,
+                                                &#34;email&#34;: &#34;test123455@gmail.com&#34;,
+                                                &#34;password&#34;: &#34;secret&#34;,
                                                 &#34;role&#34;: &#34;admin&#34;,
                                                 &#34;isActive&#34;: false
                                                 }</span>
@@ -9564,11 +9853,25 @@
                                                     Users</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/users
+                                                {{URL}}/users
                                             </h4>
                                         </a></div>
                                     <div id=collapse-User-GetAllUsers class="panel-collapse collapse">
-                                        <div class=panel-body></div>
+                                        <div class=panel-body>
+                                            <h5 class="label label-info">Query</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>search
+                                                        <td>phanphanit.pp123456@gmail.com
+                                                        <td>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-info" id=jump-User-GetSingleUser>
@@ -9580,7 +9883,7 @@
                                                     User</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/users/61d3f8fb7a321fe0b291c559
+                                                {{URL}}/users/61d56afe8043a0c4c3592c30
                                             </h4>
                                         </a></div>
                                     <div id=collapse-User-GetSingleUser class="panel-collapse collapse">
@@ -9596,7 +9899,7 @@
                                                     User</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-info">GET</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/users/showMe
+                                                {{URL}}/users/showMe
                                             </h4>
                                         </a></div>
                                     <div id=collapse-User-ShowcurrentUser class="panel-collapse collapse">
@@ -9612,7 +9915,7 @@
                                                 &nbsp;|&nbsp;
                                                 <strong class="request-method border-warning">PATCH</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/users/updateUser
+                                                {{URL}}/users/updateUser
                                             </h4>
                                         </a>
                                     </div>
@@ -9635,7 +9938,7 @@
                                                     Password</strong> &nbsp;|&nbsp;
                                                 <strong class="request-method border-warning">PATCH</strong>
                                                 &nbsp;
-                                                https://wsb-server.herokuapp.com/api/v1/users/updateUserPassword
+                                                {{URL}}/users/updateUserPassword
                                             </h4>
                                         </a>
                                     </div>
@@ -9656,13 +9959,14 @@
             </div>
         </div>
     </div>
-    <script src="./wsb-javascript.js"></script><br><br>
+    <script src="./wsb-javascript.js"></script>
+    <br><br>
     <footer class="navbar-default navbar-fixed-bottom">
         <div class=container-fluid>
             <div class="span12 text-center"><span data-toggle=tooltip
                     title="If the application help you, please feel free to give a star to the project in github. Your star inspire me to work more on open-source projects like this!">Made
                     with <em class=love-color>&#9829;</em> by <a href=https://github.com/thedevsaddam target=_blank
-                        class=text-muted>thedevsaddam</a> | Generated at: 2022-01-04 15:49:16 by <a
+                        class=text-muted>thedevsaddam</a> | Generated at: 2022-05-20 19:10:33 by <a
                         href=https://github.com/thedevsaddam/docgen target=_blank class=text-muted>docgen</a></span>
             </div>
         </div>

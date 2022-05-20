@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const Token = require('../models/Token');
 const {StatusCodes} = require('http-status-codes');
-const {createTokenUser, attachCookiesToResponse, createJWT, createJWTWithExp} = require('../utils');
+const {createTokenUser, attachCookiesToResponse, createHash, createJWTWithExp, sendResetPasswordEmail} = require('../utils');
 const CustomError = require('../errors');
 const crypto = require('crypto');
 
@@ -89,7 +89,6 @@ const googleLogin = (req, res) => {
         res.redirect(`${origin}/signin`);
     }else{
         const token = createJWTWithExp({payload: req.user.toJSON()});
-        // return res.status(200).json({token});
         res.redirect(`${origin}/send-token?token=${token}`);
     }
 }
@@ -98,8 +97,7 @@ const facebookLogin = (req, res) => {
     if(req.user==="error"){
         res.redirect(`${origin}/signin`);
     }else{
-        const tokenUser = createTokenUser(req.user);
-        const token = createJWT({payload: tokenUser});
+        const token = createJWTWithExp({payload: req.user.toJSON()});
         res.redirect(`${origin}/send-token?token=${token}`);
     }
 }
@@ -117,10 +115,55 @@ const logout = async (req, res) => {
     res.status(StatusCodes.OK).json({msg: 'User logged out!'});
 }
 
+const forgotPassword = async (req, res) => {
+    const {email} = req.body;
+    if(!email){
+      throw new CustomError.BadRequestError('Please provide valid email');
+    }
+    const user = await User.findOne({email});
+    if(user.googleId || user.facebookId){
+        return res.status(StatusCodes.OK).json({msg: "Please check your email for reset password link"});
+    }
+    if(user){
+      const passwordToken = crypto.randomBytes(70).toString('hex');
+      // send email
+      const origin = process.env.DOMAIN_FRONT_END;
+      await sendResetPasswordEmail({name: user.name, email: user.email, token:passwordToken,origin});
+      const tenMinutes = 1000 * 60 * 10;
+      const passwordTokenExpirationDate = new Date(Date.now() + tenMinutes);
+      user.passwordToken = createHash(passwordToken);
+      user.passwordTokenExpirationDate = passwordTokenExpirationDate;
+      await user.save();
+    }
+    res.status(StatusCodes.OK).json({msg: "Please check your email for reset password link"});
+  }
+  const resetPassword = async (req, res) => {
+    const {token, email, password} = req.body;
+    if(!token || !email || !password){
+      throw new CustomError.BadRequestError('Please provide all values');
+    }
+    const user = await User.findOne({email});
+    if(user.googleId || user.facebookId){
+        return res.status(StatusCodes.OK).json({msg: "Reset password"});
+    }
+    if(user){
+      const currentDate = new Date();
+      if(user.passwordToken === createHash(token) && user.passwordTokenExpirationDate > currentDate){
+        user.password = password;
+        user.passwordToken = null;
+        user.passwordTokenExpirationDate = null;
+        await user.save();
+      }
+    }
+    res.status(StatusCodes.OK).json({msg: "Reset password"});
+  }
+
 module.exports = {
     register,
     login,
     logout,
     googleLogin,
-    facebookLogin
+    facebookLogin,
+    forgotPassword,
+    resetPassword
 }

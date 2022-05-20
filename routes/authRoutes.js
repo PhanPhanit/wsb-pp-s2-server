@@ -9,12 +9,16 @@ const {
     login,
     logout,
     googleLogin,
-    facebookLogin
+    facebookLogin,
+    forgotPassword,
+    resetPassword
 } = require('../controllers/authController');
 
 
 router.post('/register', register);
 router.post('/login', login);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
 router.delete('/logout', authenticationUser, logout);
 
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email'], session: false}));
